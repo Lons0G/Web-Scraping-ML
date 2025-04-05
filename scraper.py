@@ -6,3 +6,13 @@ url = 'https://listado.mercadolibre.com.mx/computacion/laptops-accesorios/nuevo/
 response = requests.get(url, timeout = 5)
 
 print('Status: ', response.status_code)
+
+
+soup = BeautifulSoup(response.text, 'html.parser')
+main = soup.find('main', id='root-app')
+
+productos = main.find('ol', class_='ui-search-layout ui-search-layout--stack')
+
+with open('pagina.html', 'w', encoding='utf-8') as archivo:
+    archivo.write(str(productos))
+print("HTML guardado correctamente en 'pagina.html'")
