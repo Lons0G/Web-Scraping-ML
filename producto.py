@@ -7,5 +7,5 @@ class Producto:
         self.fecha  = fecha
 
     def __repr__(self):
-        return f"Producto(nombre='{self.nombre}', precio='{self.precio}', vendedor='{self.vendedor}', calificacion='{self.calificacion}')"
+        return f"Producto(nombre='{self.nombre}', precio='{self.precio}', vendedor='{self.vendedor}', calificacion='{self.calificacion}', fecha='{self.fecha}')"
 

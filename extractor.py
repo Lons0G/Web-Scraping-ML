@@ -1,9 +1,9 @@
 from types import NoneType
 from bs4 import BeautifulSoup
 from producto import Producto
-from datetime import date
+from datetime import date, timedelta
 
-fecha = date.today() 
+fecha = date.today() - timedelta(days=5)  
 
 with open('pagina.html', 'r', encoding='utf-8') as archivo:
     html = archivo.read()
@@ -26,11 +26,11 @@ for producto in lista:
     elif type(vendedor) != NoneType and type(calificacion) == NoneType:
         prod = Producto(nombre.text, precio.text, vendedor.text, '', fecha)
     else: 
-        prod = Producto(nombre.text, precio.text, vendedor.text, calificacion.text, fecha)
+        prod = Producto(nombre.text,float(precio.text.replace('$', '').replace(',','')), vendedor.text, float(calificacion.text), fecha)
+
     
     productos.append(prod)
 
-print(len(productos))
 i = 0
 while i < len(productos):
     print(productos[i])

@@ -13,6 +13,6 @@ main = soup.find('main', id='root-app')
 
 productos = main.find('ol', class_='ui-search-layout ui-search-layout--stack')
 
-with open('pagina.html', 'w', encoding='utf-8') as archivo:
+with open('pagina_dia_5.html', 'w', encoding='utf-8') as archivo:
     archivo.write(str(productos))
 print("HTML guardado correctamente en 'pagina.html'")
