@@ -3,35 +3,30 @@ from bs4 import BeautifulSoup
 from producto import Producto
 from datetime import date, timedelta
 
-fecha = date.today() - timedelta(days=5)  
+def scrape_html(file_path):
+    fecha = date.today() - timedelta(days=5)  
+    productos = []
 
-with open('pagina.html', 'r', encoding='utf-8') as archivo:
-    html = archivo.read()
+    with open(file_path, 'r', encoding='utf-8') as archivo:
+        soup = BeautifulSoup(archivo.read(), 'html.parser')
 
-soup = BeautifulSoup(html, 'html.parser')
+    for item in soup.find_all('li', class_='ui-search-layout__item'):
+        nombre = item.find('a', class_='poly-component__title')
+        precio = item.find('span', class_='andes-money-amount')
+        vendedor = item.find('span', class_='poly-component__seller')
+        calificacion = item.find('span', class_='poly-reviews__rating')
 
-lista = soup.find_all('li', class_='ui-search-layout__item')
+        # Limpieza de datos
+        precio_limpio = float(precio.text.replace('$', '').replace(',', '')) if precio else 0.0
+        vendedor_text = vendedor.text.strip() if vendedor else ''
+        calificacion_num = float(calificacion.text) if calificacion else None
 
-productos = []
-for producto in lista:
-    nombre = producto.find('a', class_='poly-component__title')
-    precio = producto.find('span', class_='andes-money-amount andes-money-amount--cents-superscript')
-    vendedor = producto.find('span', class_='poly-component__seller')
-    calificacion = producto.find('span', class_='poly-reviews__rating')
+        productos.append(Producto(
+            nombre=nombre.text if nombre else '',
+            precio=precio_limpio,
+            vendedor=vendedor_text,
+            calificacion=calificacion_num,
+            fecha=fecha
+        ))
 
-    if type(vendedor) == NoneType and type(calificacion) == NoneType:
-        prod = Producto(nombre.text, precio.text, '', '', fecha)
-    elif type(vendedor) == NoneType and type(calificacion) != NoneType:
-        prod = Producto(nombre.text, precio.text, '', calificacion.text, fecha)
-    elif type(vendedor) != NoneType and type(calificacion) == NoneType:
-        prod = Producto(nombre.text, precio.text, vendedor.text, '', fecha)
-    else: 
-        prod = Producto(nombre.text,float(precio.text.replace('$', '').replace(',','')), vendedor.text, float(calificacion.text), fecha)
-
-    
-    productos.append(prod)
-
-i = 0
-while i < len(productos):
-    print(productos[i])
-    i += 1
+    return productos
