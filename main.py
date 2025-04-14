@@ -3,7 +3,7 @@ from database import Database
 
 def main():
     # 1. Extraer datos
-    productos = scrape_html('pagina.html')
+    productos = scrape_html('pagina_dia_5.html')
     
     # 2. Conexión a DB y creación de tabla
     db = Database()

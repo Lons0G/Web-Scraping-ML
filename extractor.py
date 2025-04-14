@@ -4,7 +4,7 @@ from producto import Producto
 from datetime import date, timedelta
 
 def scrape_html(file_path):
-    fecha = date.today() - timedelta(days=5)  
+    fecha = date.today() - timedelta(days=1)  
     productos = []
 
     with open(file_path, 'r', encoding='utf-8') as archivo:
