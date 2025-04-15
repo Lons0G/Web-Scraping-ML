@@ -1,4 +1,5 @@
 import psycopg2
+import numpy as np
 
 class Database:
     def __init__(self):
@@ -40,6 +41,24 @@ class Database:
         ))
         self.conn.commit()
     
+    def obtener_datos_numpy(self):
+        """Devuelve (datos_numpy, nombres_columnas) para machine learning"""
+        with self.conn.cursor() as cursor:
+            cursor.execute("""
+                SELECT precio, calificacion, recomendado
+                FROM productos
+                ORDER BY fecha ASC 
+            """)
+            
+            datos = cursor.fetchall()
+            
+            arr = np.array(datos, dtype=float)
+            arr[:, 0] = np.round(arr[:, 0].astype(float), 2)
+            arr[:, 1] = np.round(arr[:, 1].astype(float), 2)
+            arr[:, 2] = arr[:, 2].astype(int)
+            
+            return arr
+
     def close(self):
         """Cierra la conexión"""
         self.cursor.close()
